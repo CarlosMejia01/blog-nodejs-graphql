@@ -46,15 +46,12 @@ const createPost = {
         title: { type: GraphQLString },
         body: { type: GraphQLString }
     },
-    async resolve(_, args) {
-        console.log(args);
-
+    async resolve(_, args, { verifiedUser }) {
         const post = new Post({
             title: args.title,
             body: args.body,
-            authorId: "63031a5e32d71f581de4451b"
+            authorId: verifiedUser._id
         });
-
         return post;
     }
 };
