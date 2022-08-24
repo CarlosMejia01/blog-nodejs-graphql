@@ -53,6 +53,9 @@ const createPost = {
             body: args.body,
             authorId: verifiedUser._id
         });
+
+        await post.save();
+
         return post;
     }
 };
