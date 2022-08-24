@@ -47,6 +47,7 @@ const createPost = {
         body: { type: GraphQLString }
     },
     async resolve(_, args, { verifiedUser }) {
+        console.log(verifiedUser);
         const post = new Post({
             title: args.title,
             body: args.body,
