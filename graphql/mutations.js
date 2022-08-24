@@ -131,7 +131,33 @@ const addComment = {
 			userId: verifiedUser._id,
 		});
 
-        return newComment.save();
+		return newComment.save();
+	},
+};
+
+const updateComment = {
+	type: CommentType,
+	description: "Update a comment",
+	args: {
+		id: { type: GraphQLID },
+		comment: { type: GraphQLString },
+	},
+	resolve: async (_, { id, comment }, { verifiedUser }) => {
+		if (!verifiedUser) throw new Error("Unauthorized");
+
+		const commentUpdated = await Comment.findByIdAndUpdate(
+			{
+				_id: id,
+				userId: verifiedUser._id,
+			},
+			{
+				comment,
+			}
+		);
+
+		if(!commentUpdated) throw new Error("Comment not found");
+
+		return commentUpdated;
 	},
 };
 
@@ -141,5 +167,6 @@ module.exports = {
 	createPost,
 	updatePost,
 	deletePost,
-    addComment
+	addComment,
+	updateComment
 };
