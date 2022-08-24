@@ -155,9 +155,29 @@ const updateComment = {
 			}
 		);
 
-		if(!commentUpdated) throw new Error("Comment not found");
+		if (!commentUpdated) throw new Error("Comment not found");
 
 		return commentUpdated;
+	},
+};
+
+const deleteComment = {
+	type: GraphQLString,
+	description: "Delet a comment",
+	args: {
+		id: { type: GraphQLID },
+	},
+	resolve: async (_, { id }, { verifiedUser }) => {
+		if (!verifiedUser) throw new Error("Unauthorized");
+
+		const commentDeleted = await Comment.findOneAndDelete({
+			_id: id,
+			userId: verifiedUser._id,
+		});
+
+		if (!commentDeleted) throw new Error("Comment not found");
+
+		return "Comment deleted";
 	},
 };
 
@@ -168,5 +188,6 @@ module.exports = {
 	updatePost,
 	deletePost,
 	addComment,
-	updateComment
+	updateComment,
+	deleteComment
 };
